@@ -13,6 +13,7 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Column(unique = true, nullable = false)
     private String name;
 
     private String email;
@@ -20,10 +21,16 @@ public class Student {
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
+    @Transient
     private long age;
 
     @OneToOne
+    @JoinColumn(name = "id")
     private Address address;
+
+    @ElementCollection
+    @CollectionTable(name="phone")
+    private List<String> phoneNumbers;
 
     public Student() {
     }
@@ -36,8 +43,9 @@ public class Student {
                 / (60L * 60L * 1000L * 24L * 365L);
     }
 
-    public Student(String name, String email, Date dateOfBirth, Address address) {
+    public Student(String name, String email, Date dateOfBirth, Address address, List<String> phoneNumbers) {
         this(name, email, dateOfBirth);
+        this.phoneNumbers = phoneNumbers;
         this.address = address;
     }
 
